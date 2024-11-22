@@ -1,27 +1,26 @@
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Toast from 'react-native-toast-message';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
-import LoginScreen from './src/screens/Login';
-import DefaultScreen from './src/screens';
-
+import {UserProvider} from './src/contexts/userContext';
 import './global.css';
+import AppSreens from './src/screens';
+
+const queryClient = new QueryClient();
 
 export type RootStackParamList = {
   Home: undefined;
   Login: {test?: string} | undefined;
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
-
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Home" component={DefaultScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <AppSreens />
+      </UserProvider>
+      <Toast />
+    </QueryClientProvider>
   );
 }
 
